@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if customer %}Editar{% else %}Crear{% endif %} cliente - sakilaAPI
+{% endblock %}
+
+{% block content %}
+<div class="columns is-centered">
+    <div class="column is-8">
+        <div class="box">
+            <h1 class="title">
+                {% if customer %}Editar{% else %}Crear{% endif %} cliente
+            </h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <label class="label">ID de tienda</label>
+                    <div class="control">
+                        {{ form.store_id }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Nombre</label>
+                    <div class="control">
+                        {{ form.first_name }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Apellido(s)</label>
+                    <div class="control">
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Correo electrónico</label>
+                    <div class="control">
+                        {{ form.email }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">ID de dirección</label>
+                    <div class="control">
+                        {{ form.address_id }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="checkbox">
+                        {{ form.active }}
+                        Cliente activo
+                    </label>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button">
+                            <span class="icon">
+                                <i class="fa-regular fa-floppy-disk"></i>
+                            </span>
+                            <span>Guardar</span>
+                        </button>
+                    </div>
+                    <div class="control">
+                        <a href="{% url 'customers_list' %}" class="button">
+                            <span class="icon">
+                                <i class="fa-regular fa-circle-xmark"></i>
+                            </span>
+                            <span>Cancelar</span>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

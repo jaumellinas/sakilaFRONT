@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservas - sakilaAPI{% endblock %}
+
+{% block content %}
+<div class="level">
+    <div class="level-left">
+        <div class="level-item">
+            <h1 class="title">Reservas</h1>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <a href="{% url 'rental_create' %}" class="button">
+                <span class="icon">
+                  <i class="fa-solid fa-file-circle-plus"></i>
+                </span>
+                <span>Nueva reserva</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if rentals %}
+    <table class="table is-fullwidth is-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cliente</th>
+                <th>Inventario</th>
+                <th>Fecha de alquiler</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rental in rentals %}
+                <tr>
+                    <td>{{ rental.rental_id }}</td>
+                    <td>{{ rental.customer_id }}</td>
+                    <td>{{ rental.inventory_id }}</td>
+                    <td>{{ rental.rental_date }}</td>
+                    <td>
+                        {% if rental.return_date %}
+                            <span class="icon">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </span>
+                            <span>{{ rental.return_date }}</span>
+                        {% else %}
+                            <span class="icon">
+                                <i class="fa-regular fa-clock"></i>
+                            </span>
+                            <span>Pendiente</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'rental_detail' rental.rental_id %}" class="button is-small">
+                            <span class="icon is-small">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
+                        </a>
+                        {% if not rental.return_date %}
+                        <form method="post" action="{% url 'rental_return' rental.rental_id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="button is-small">
+                                <span class="icon is-small">
+                                    <i class="fa-solid fa-square-check"></i>
+                                </span>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav class="pagination" role="navigation" aria-label="pagination">
+        {% if rentals.has_previous %}
+            <a href="?page=1" class="pagination-previous">Primera</a>
+            <a href="?page={{ rentals.previous_page_number }}" class="pagination-previous">Anterior</a>
+        {% endif %}
+
+        <ul class="pagination-list">
+            {% for num in rentals.paginator.page_range %}
+                {% if num == 1 or num == rentals.paginator.num_pages or num >= rentals.number|add:'-2' and num <= rentals.number|add:'2' %}
+                    <li>
+                        {% if rentals.number == num %}
+                            <a class="pagination-link is-current" aria-label="Página {{ num }}" aria-current="page">{{ num }}</a>
+                        {% else %}
+                            <a href="?page={{ num }}" class="pagination-link" aria-label="Ir a página {{ num }}">{{ num }}</a>
+                        {% endif %}
+                    </li>
+                {% elif num == 2 or num == rentals.paginator.num_pages|add:'-1' %}
+                    <li>
+                        <span class="pagination-ellipsis">&hellip;</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        {% if rentals.has_next %}
+            <a href="?page={{ rentals.next_page_number }}" class="pagination-next">Siguiente</a>
+            <a href="?page={{ rentals.paginator.num_pages }}" class="pagination-next">Última</a>
+        {% endif %}
+    </nav>
+{% else %}
+    <div class="notification is-info">
+        <p>No hay reservas</p>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - sakilaAPI{% endblock %}
+
+{% block content %}
+<div class="hero is-medium"
+     style="background: transparent; padding: 4rem 0;">
+    <div class="hero-body">
+        <div class="content has-text-centered">
+            <h1 class="title is-1">sakilaAPI Frontend</h1>
+            <p class="subtitle is-4">
+                Gestiona clientes y reservas fácilmente
+            </p>
+            {% if not request.session.access_token %}
+                <div class="buttons is-centered">
+                    <a href="{% url 'login' %}" class="button is-large">
+                        <span class="icon">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        </span>
+                        <span>Iniciar sesión</span>
+                    </a>
+                    <a href="{% url 'register' %}" class="button is-large">
+                        <span class="icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </span>
+                        <span>Registrarse</span>
+                    </a>
+                </div>
+            {% else %}
+                <div class="buttons is-centered">
+                    <a href="{% url 'customers_list' %}" class="button is-large">
+                        <span class="icon">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <span>Clientes</span>
+                    </a>
+                    <a href="{% url 'rentals_list' %}" class="button is-large">
+                        <span class="icon">
+                            <i class="fa-regular fa-address-book"></i>
+                        </span>
+                        <span>Reservas</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}sakilaAPI{% endblock %}</title>
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://kit.fontawesome.com/c3c63f74a9.js" crossorigin="anonymous"></script>
+    <style>
+        html, body {
+            font-family: Inter, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 4rem auto;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        footer {
+            margin-top: auto;
+        }
+
+        a {
+            text-decoration: none !important;
+            color: inherit !important;
+            transition: 0.3s !important;
+        }
+
+        a:hover {
+            font-weight: bold !important;
+            transition: 0.3s !important;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        footer a {
+            text-decoration: underline !important;
+        }
+
+        .pagination-link {
+            background-color: transparent !important;
+            border-color: #dbdbdb !important;
+            color: #363636 !important;
+        }
+
+        .pagination-link:hover {
+            border-color: #b5b5b5 !important;
+            background-color: #f5f5f5 !important;
+        }
+
+        .pagination-link.is-current {
+            background-color: #f5f5f5 !important;
+            border-color: #dbdbdb !important;
+            color: #363636 !important;
+        }
+
+        .pagination-previous,
+        .pagination-next {
+            background-color: transparent !important;
+            border-color: #dbdbdb !important;
+            color: #363636 !important;
+        }
+
+        .pagination-previous:hover,
+        .pagination-next:hover {
+            border-color: #b5b5b5 !important;
+            background-color: #f5f5f5 !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" role="navigation"
+         aria-label="main navigation">
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                {% if request.session.access_token %}
+                    <a href="{% url 'home' %}" class="navbar-item">
+                        <strong>
+                            Inicio
+                        </strong>
+                    </a>
+                    <a href="{% url 'customers_list' %}"
+                       class="navbar-item">
+                        <strong>Clientes</strong>
+                    </a>
+                    <a href="{% url 'rentals_list' %}"
+                       class="navbar-item">
+                        <strong>Reservas</strong>
+                    </a>
+                    <div class="navbar-item">
+                        <a href="{% url 'logout' %}" class="button">
+                            <span class="icon">
+                                <i class="fa-regular fa-circle-user"></i>
+                            </span>
+                            <span>{{ request.session.username }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a href="{% url 'home' %}" class="button">
+                                <span class="icon">
+                                    <i class="fa-regular fa-circle-user"></i>
+                                </span>
+                                <span>Sesión no iniciada</span>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="notification
+                     {% if message.tags %}
+                        is-{{ message.tags }}
+                     {% else %}
+                        is-info
+                     {% endif %}">
+                    <button class="delete"></button>
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>© 2025 por <b>Jaume Llinàs</b>. Hecho para la asignatura de <b>Accés a Dades</b>. Código fuente <a href="https://github.com/jaumellinas/sakilaFRONT" target="_blank">disponible en GitHub</a>.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            (document.querySelectorAll(
+                '.notification .delete'
+            ) || []).forEach(($delete) => {
+                const $notification = $delete.parentNode;
+                $delete.addEventListener('click', () => {
+                    $notification.parentNode.removeChild($notification);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}(#{{ customer.customer_id }}) {{ customer.first_name }} {{ customer.last_name }} - sakilaAPI{% endblock %}
+
+{% block content %}
+<div class="box">
+    <h1 class="title">{{ customer.first_name }} {{ customer.last_name }}</h1>
+    <div class="content">
+        <p><strong>ID:</strong> {{ customer.customer_id }}</p>
+        <p><strong>Email:</strong> {{ customer.email }}</p>
+        <p><strong>Tienda:</strong> {{ customer.store_id }}</p>
+        <p><strong>Dirección:</strong> {{ customer.address_id }}</p>
+        <p>
+            <strong>Estado:</strong>
+            {% if customer.active %}
+                <span class="icon">
+                  <i class="fa-regular fa-circle-check"></i>
+                </span>
+                Activo
+            {% else %}
+                <span class="icon">
+                  <i class="fa-regular fa-circle-xmark"></i>
+                </span>
+                Inactivo
+            {% endif %}
+        </p>
+        <p>
+            <strong>Creado:</strong>
+            {{ customer.create_date }}
+        </p>
+    </div>
+    <div class="buttons">
+        <a href="{% url 'customer_update' customer.customer_id %}" class="button">
+            <span class="icon">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </span>
+            <span>Editar</span>
+        </a>
+        <a href="{% url 'customer_delete' customer.customer_id %}" class="button">
+            <span class="icon">
+                <i class="fa-solid fa-trash-can"></i>
+            </span>
+            <span>Eliminar</span>
+        </a>
+        <a href="{% url 'customers_list' %}" class="button">
+            <span class="icon">
+                <i class="fa-solid fa-angle-left"></i>
+            </span>
+            <span>Volver</span>
+        </a>
+    </div>
+</div>
+
+{% if rentals %}
+    <h2 class="title is-4">Reservas</h2>
+    <table class="table is-fullwidth is-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fecha de alquiler</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rental in rentals %}
+                <tr>
+                    <td>{{ rental.rental_id }}</td>
+                    <td>{{ rental.rental_date }}</td>
+                    <td>
+                        {% if rental.return_date %}
+                            <span class="icon">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </span>
+                            <span>{{ rental.return_date }}</span>
+                        {% else %}
+                            <span class="icon">
+                                <i class="fa-regular fa-clock"></i>
+                            </span>
+                            <span>Pendiente</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'rental_detail' rental.rental_id %}" class="button is-small">
+                            <span class="icon is-small">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
+                        </a>
+                        {% if not rental.return_date %}
+                        <form method="post" action="{% url 'rental_return' rental.rental_id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="button is-small">
+                                <span class="icon is-small">
+                                    <i class="fa-solid fa-square-check"></i>
+                                </span>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

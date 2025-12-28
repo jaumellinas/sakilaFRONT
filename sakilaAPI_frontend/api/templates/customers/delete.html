@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar cliente - sakilaAPI{% endblock %}
+
+{% block content %}
+<div class="columns is-centered">
+    <div class="column is-6">
+        <div class="box">
+            <h1 class="title is-4">
+                ¿Eliminar cliente?
+            </h1>
+            <p>
+                ¿Estás seguro de que deseas eliminar al cliente <strong>#{{ customer.customer_id }}. {{ customer.first_name }} {{ customer.last_name }}</strong> de la base de datos? Esta acción es <strong>irreversible</strong>.
+            </p>
+            <form method="post" style="margin-top: 2rem;">
+                {% csrf_token %}
+                <div class="buttons">
+                    <button type="submit" class="button is-danger">
+                        <span class="icon">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </span>
+                        <span>Eliminar</span>
+                    </button>
+                    <a href="{% url 'customers_list' %}" class="button is-light">
+                        <span class="icon">
+                            <i class="fa-regular fa-circle-xmark"></i>
+                        </span>
+                        <span>Cancelar</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

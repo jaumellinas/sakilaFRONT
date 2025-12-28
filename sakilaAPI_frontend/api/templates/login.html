@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar sesión - sakilaAPI{% endblock %}
+
+{% block content %}
+<div class="columns is-centered">
+    <div class="column is-5">
+        <div class="box">
+            <h1 class="title">Iniciar sesión</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <div class="control has-icons-left">
+                        {{ form.username }}
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control has-icons-left">
+                        {{ form.password }}
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button">
+                            <span class="icon">
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            </span>
+                            <span>Iniciar sesión</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

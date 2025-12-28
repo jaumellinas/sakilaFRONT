@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Reserva #{{ rental.rental_id }} - sakilaAPI{% endblock %}
+
+{% block content %}
+<div class="box">
+    <h1 class="title">Reserva #{{ rental.rental_id }}</h1>
+    <div class="content">
+        <p><strong>Cliente:</strong> {{ rental.customer_id }}</p>
+        <p><strong>Inventario:</strong> {{ rental.inventory_id }}</p>
+        <p><strong>Personal:</strong> {{ rental.staff_id }}</p>
+        <p><strong>Fecha de alquiler:</strong> {{ rental.rental_date }}</p>
+        <p>
+            <strong>Devuelto:</strong>
+            {% if rental.return_date %}
+                <span class="icon">
+                    <i class="fa-regular fa-circle-check"></i>
+                </span>
+            <span>{{ rental.return_date }}</span>
+            {% else %}
+                <span class="icon">
+                    <i class="fa-regular fa-clock"></i>
+                </span>
+            <span>Pendiente</span>
+            {% endif %}
+        </p>
+    </div>
+    <div class="buttons">
+        {% if not rental.return_date %}
+            <form method="post" action="{% url 'rental_return' rental.rental_id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="button mr-2">
+                    <span class="icon">
+                        <i class="fa-solid fa-square-check"></i>
+                    </span>
+                    <span>Marcar como devuelta</span>
+                </button>
+            </form>
+        {% endif %}
+        <a onclick="history.back()" class="button">
+            <span class="icon">
+                <i class="fa-solid fa-angle-left"></i>
+            </span>
+            <span>Volver</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

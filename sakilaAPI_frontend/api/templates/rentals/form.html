@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear reserva - sakilaAPI{% endblock %}
+
+{% block content %}
+<div class="columns is-centered">
+    <div class="column is-8">
+        <div class="box">
+            <h1 class="title">Crear reserva</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <label class="label">Cliente</label>
+                    <div class="control">
+                        {{ form.customer_id }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Inventario</label>
+                    <div class="control">
+                        {{ form.inventory_id }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Personal</label>
+                    <div class="control">
+                        {{ form.staff_id }}
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button">
+                            <span class="icon">
+                                <i class="fa-regular fa-floppy-disk"></i>
+                            </span>
+                            <span>Crear</span>
+                        </button>
+                    </div>
+                    <div class="control">
+                        <a href="{% url 'rentals_list' %}" class="button">
+                            <span class="icon">
+                                <i class="fa-regular fa-circle-xmark"></i>
+                            </span>
+                            <span>Cancelar</span>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

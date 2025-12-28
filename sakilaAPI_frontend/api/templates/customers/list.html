@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Clientes - sakilaAPI{% endblock %}
+
+{% block content %}
+<div class="level">
+    <div class="level-left">
+        <div class="level-item">
+            <h1 class="title">Clientes</h1>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <a href="{% url 'customer_create' %}" class="button">
+                <span class="icon">
+                  <i class="fa-solid fa-user-plus"></i>
+                </span>
+                <span>Nuevo cliente</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if customers %}
+    <table class="table is-fullwidth is-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Correo electrónico</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.customer_id }}</td>
+                    <td>{{ customer.first_name }}</td>
+                    <td>{{ customer.last_name }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>
+                        {% if customer.active %}
+                            <span class="icon">
+                              <i class="fa-regular fa-circle-check"></i>
+                            </span>
+                            <span>Activo</span>
+                        {% else %}
+                            <span class="icon">
+                              <i class="fa-regular fa-circle-xmark"></i>
+                            </span>
+                            <span>Inactivo</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'customer_detail' customer.customer_id %}" class="button is-small">
+                            <span class="icon is-small">
+                              <i class="fa-solid fa-eye"></i>
+                            </span>
+                        </a>
+                        <a href="{% url 'customer_update' customer.customer_id %}" class="button is-small">
+                            <span class="icon is-small">
+                              <i class="fa-solid fa-pen-to-square"></i>
+                            </span>
+                        </a>
+                        <a href="{% url 'customer_delete' customer.customer_id %}" class="button is-small">
+                            <span class="icon is-small">
+                              <i class="fa-solid fa-trash-can"></i>
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav class="pagination" role="navigation" aria-label="pagination">
+        {% if customers.has_previous %}
+            <a href="?page=1" class="pagination-previous">Primera</a>
+            <a href="?page={{ customers.previous_page_number }}" class="pagination-previous">Anterior</a>
+        {% endif %}
+
+        <ul class="pagination-list">
+            {% for num in customers.paginator.page_range %}
+                {% if num == 1 or num == customers.paginator.num_pages or num >= customers.number|add:'-2' and num <= customers.number|add:'2' %}
+                    <li>
+                        {% if customers.number == num %}
+                            <a class="pagination-link is-current" aria-label="Página {{ num }}" aria-current="page">{{ num }}</a>
+                        {% else %}
+                            <a href="?page={{ num }}" class="pagination-link" aria-label="Ir a página {{ num }}">{{ num }}</a>
+                        {% endif %}
+                    </li>
+                {% elif num == 2 or num == customers.paginator.num_pages|add:'-1' %}
+                    <li>
+                        <span class="pagination-ellipsis">&hellip;</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        {% if customers.has_next %}
+            <a href="?page={{ customers.next_page_number }}" class="pagination-next">Siguiente</a>
+            <a href="?page={{ customers.paginator.num_pages }}" class="pagination-next">Última</a>
+        {% endif %}
+    </nav>
+{% else %}
+    <div class="notification is-info">
+        <p>No hay clientes</p>
+    </div>
+{% endif %}
+{% endblock %}
